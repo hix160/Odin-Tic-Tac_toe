@@ -51,15 +51,21 @@ const Gameboard = () => {
     };
 };
 
-const Player = (symbol) => {
+const Player = (symbol, name) => {
     return {
         symbol,
+        name,
     };
 };
 
 const DomManager = () => {
     const topContainer = document.querySelector(".game.top.text");
     const bottomContainer = document.querySelector(".game.bottom.text");
+
+    const gameConditionContainer = document.querySelector(".game.condition");
+
+    
+
     const boardContainer = document.querySelector(".game.board");
     
     const createBoard = () => {
@@ -69,12 +75,7 @@ const DomManager = () => {
 
                 const cellElement = document.createElement("div")
 
-                
-
-                cellElement.textContent = index;
-
                 cellElement.classList.add(`cell-${index}`);
-                
 
                 cellElement.addEventListener("click", () => {
                     Game.playMove(i,j);
@@ -87,6 +88,31 @@ const DomManager = () => {
             }
         }
     };
+
+    const updateGameCondition = (text) => {
+        gameConditionContainer.textContent = text;
+    };
+
+    const updateNames = (player, playerName) => {
+        const dds = document.querySelector(`.score-container > .${player}.name`);
+        dds.textContent = playerName+":";
+    }
+
+    const getPlayerName = (player) => {
+
+        const playerNameInput = document.querySelector(`#${player}-name`);
+        if(playerNameInput.value.trim() === ""){
+            console.log(playerNameInput.placeholder)
+            return playerNameInput.placeholder;
+        }
+        else {
+            console.log(playerNameInput.value.trim())
+            updateNames(player, playerNameInput.value.trim());
+            return playerNameInput.value.trim();
+        }
+    }
+
+    
 
     const updateBoard = (board) => {
         for(let i=0; i<3;i++) {
@@ -102,6 +128,8 @@ const DomManager = () => {
     createBoard();
     return {
         updateBoard,
+        updateGameCondition,
+        getPlayerName,
 
     };
 };
@@ -114,9 +142,11 @@ const Game = (() => {
 
     const player1 = Player('X'); // Player 1 is X
     const player2 = Player('O'); // Player 2 is O
+
     currentPlayer = player1; // Set Player 1 as the first player
 
     const domManager = DomManager();
+
 
     const switchTurn = () => {
         currentPlayer = (currentPlayer === player1) ? player2 : player1;
@@ -125,15 +155,22 @@ const Game = (() => {
     const playMove = (row, col) => {
         if (gameOver) return; // If game is over, don't allow moves
 
+
+        player1.name = domManager.getPlayerName("player1");
+
+        player2.name = domManager.getPlayerName("player2");
+
         const moveSuccessful = gameboard.placeSymbol(row, col, currentPlayer.symbol);
         if (!moveSuccessful) return; // If the move is invalid, don't proceed
 
         if (gameboard.checkWinner(currentPlayer.symbol)) {
+            domManager.updateGameCondition(`${currentPlayer.name} wins!`)
             gameOver = true;
             console.log(`${currentPlayer.symbol} wins!`);
             return;
         } else if (gameboard.isTie()) {
             gameOver = true;
+            domManager.updateGameCondition("It's a tie!")
             console.log("It's a tie!");
             return;
         }

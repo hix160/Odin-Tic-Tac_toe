@@ -19,9 +19,43 @@
     </header>
     <main>
         <div class="game container">
-            <div class="game top text">Game Top Text</div>
+            <div class="game top text">
+                <div class="score-container">
+                    <div class="player1 name"> player1:</div>
+                    <div class="score">0</div>
+                </div>
+                <div class="game condition">player1 has won!</div>
+                <div class="score-container">
+                    <div class="player2 name"> player2:</div>
+                    <div class="score">0</div>
+                </div>
+            </div>
             <div class="game board"></div>
-            <div class="game bottom text">Game Bottom Text</div>
+            <div class="game bottom text">
+
+                <div class="player1 name-container">
+                    <label for="player1-name">Player 1 Name:</label>
+                    <input type="text" id="player1-name" placeholder="player1">
+                </div>
+                
+
+            <!-- Player 2 Options -->
+                
+                <div>
+                    <label>Player 2:</label>
+                    <input type="radio" id="player2-human" name="player2-type" value="human" checked>
+                    <label for="player2-human">Human</label>
+
+                    <input type="radio" id="player2-bot" name="player2-type" value="bot">
+                    <label for="player2-bot">Bot</label>
+                </div>
+
+                <!-- Player 2 Name Input (conditional on being human) -->
+                <div class="player2 name-container">
+                    <label for="player2-name">Player 2 Name:</label>
+                    <input type="text" id="player2-name" placeholder="player2">
+                </div>
+            </div>
         </div>
     </main>
     <footer></footer>
